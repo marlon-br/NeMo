@@ -167,22 +167,22 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
                         continue
                         
                #     line = re.findall('.*?[、 。.!\?]', line)
-               #     line = line.split()
-               
-                    b = re.findall('.*?[、 。.!\?]', line)
-
-                    for i, idx in enumerate(b):
-                        b[i] = " ".join(b[i])
+                    line = line.split()
+        #       
+          #          b = re.findall('.*?[、 。.!\?]', line)
+#
+          #          for i, idx in enumerate(b):
+          #              b[i] = " ".join(b[i])
                     #print(b)
-
-                    str = set('、。,.?')
-
-                    for i, idx in enumerate(b):
-                        if len(b[i]) > 1:
-                            if b[i][-1] in str:
-                                b[i] = b[i][0: -2:] + b[i][-1::]
-
-                    line = " ".join(b)
+#
+         #           str = set('、。,.?')
+#
+          #          for i, idx in enumerate(b):
+          #              if len(b[i]) > 1:
+          #                  if b[i][-1] in str:
+          #                      b[i] = b[i][0: -2:] + b[i][-1::]
+#
+          #          line = " ".join(b)
                
                     text = ''
                     labels = ''
