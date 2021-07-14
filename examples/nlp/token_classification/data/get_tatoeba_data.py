@@ -160,8 +160,8 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
         with open(text_file, 'w') as text_f:
             with open(labels_file, 'w') as labels_f:
                 for line in f:
-                    if " " in line:
-                        continue
+             #       if " " in line:
+              #          continue
                         
                     if len(line) == 0:
                         continue
