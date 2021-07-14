@@ -166,7 +166,11 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
                     if len(line) == 0:
                         continue
                         
-               #     line = re.findall('.*?[、 。.!\?]', line)
+                    line = line.replace('\t', ' ')
+                    line = line.replace(' 。', '。')
+                    line = line.replace(' 、', '、')
+                    line = line.replace(' ?', '?')
+                    line = line.replace(' !', '!')
                     line = line.split()
         #       
           #          b = re.findall('.*?[、 。.!\?]', line)
@@ -189,7 +193,7 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
                     for word in line:
                         label = word[-1] if word[-1] in punct_marks else 'O'
                         
-                        if (label == " 。"):
+                        if (label == "。"):
                             label = "."
                         
                         if (label == "、"):
@@ -203,7 +207,7 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
                                 label += 'O'
 
                             word = word.lower()
-                            text += word
+                            text += word + ' '
                             labels += label + ' '
 
                     if len(text.strip()) > 0:
