@@ -120,16 +120,16 @@ def __split_into_train_dev(in_file: str, train_file: str, dev_file: str, percent
     dev_file.write(' '.join(lines[-dev_size:]))
 
 
-def remove_punctuation(word: str):
+def remove_punctuation(word: str, punct_marks: str = '、。,.?'):
     """
     Removes all punctuation marks from a word except for '
     that is often a part of word: don't, it's, and so on
     """
-    all_punct_marks = string.punctuation.replace("'", '')
-    return re.sub('[' + all_punct_marks + ']', '', word)
+ #   all_punct_marks = string.punctuation.replace("'", '')
+    return re.sub('[' + punct_marks + ']', '', word)
 
 
-def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = ',.?'):
+def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '、。,.?'):
     """
     Create datasets for training and evaluation.
 
@@ -160,7 +160,30 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
         with open(text_file, 'w') as text_f:
             with open(labels_file, 'w') as labels_f:
                 for line in f:
-                    line = line.split()
+                    if " " in line:
+                        continue
+                        
+                    if len(line) == 0:
+                        continue
+                        
+               #     line = re.findall('.*?[、 。.!\?]', line)
+               #     line = line.split()
+               
+                    b = re.findall('.*?[、 。.!\?]', line)
+
+                    for i, idx in enumerate(b):
+                        b[i] = " ".join(b[i])
+                    #print(b)
+
+                    str = set('、。,.?')
+
+                    for i, idx in enumerate(b):
+                        if len(b[i]) > 1:
+                            if b[i][-1] in str:
+                                b[i] = b[i][0: -2:] + b[i][-1::]
+
+                    line = " ".join(b)
+               
                     text = ''
                     labels = ''
                     for word in line:
@@ -173,11 +196,12 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
                                 label += 'O'
 
                             word = word.lower()
-                            text += word + ' '
+                            text += word
                             labels += label + ' '
 
-                    text_f.write(text.strip() + '\n')
-                    labels_f.write(labels.strip() + '\n')
+                    if len(text.strip()) > 0:
+                        text_f.write(text.strip() + '\n')
+                        labels_f.write(labels.strip() + '\n')
 
     print(f'{text_file} and {labels_file} created from {file_path}.')
 
