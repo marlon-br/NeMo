@@ -189,10 +189,10 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
                     for word in line:
                         label = word[-1] if word[-1] in punct_marks else 'O'
                         
-                        if (label == " 。")
+                        if (label == " 。"):
                             label = "."
                         
-                        if (label == "、")
+                        if (label == "、"):
                             label = ","
                         
                         word = remove_punctuation(word)
