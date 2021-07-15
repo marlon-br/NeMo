@@ -160,9 +160,6 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
         with open(text_file, 'w', encoding='utf-8') as text_f:
             with open(labels_file, 'w', encoding='utf-8') as labels_f:
                 for line in f:
-             #       if " " in line:
-              #          continue
-                        
                     if len(line) == 0:
                         continue
                         
@@ -172,28 +169,19 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
                     line = line.replace(' ?', '?')
                     line = line.replace(' !', '!')
                     line = line.split()
-        #       
-          #          b = re.findall('.*?[、 。.!\?]', line)
-#
-          #          for i, idx in enumerate(b):
-          #              b[i] = " ".join(b[i])
-                    #print(b)
-#
-         #           str = set('、。,.?')
-#
-          #          for i, idx in enumerate(b):
-          #              if len(b[i]) > 1:
-          #                  if b[i][-1] in str:
-          #                      b[i] = b[i][0: -2:] + b[i][-1::]
-#
-          #          line = " ".join(b)
-               
+                      
                     text = ''
                     labels = ''
+                    tokens = 0 
                     for word in line:
+                        tokens += 1
+                        add_break = False
+                        
                         label = word[-1] if word[-1] in punct_marks else 'O'
                         
                         if (label == "。"):
+                            if tokens > 100:
+                                add_break = True
                             label = "."
                         
                         if (label == "、"):
@@ -209,6 +197,14 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
                             word = word.lower()
                             text += word + ' '
                             labels += label + ' '
+                            
+                        if (add_break):
+                            if len(text.strip()) > 0:
+                                text_f.write(text.strip() + '\n')
+                                labels_f.write(labels.strip() + '\n')
+                                text = ''
+                                labels = ''
+                                tokens = 0
 
                     if len(text.strip()) > 0:
                         text_f.write(text.strip() + '\n')
