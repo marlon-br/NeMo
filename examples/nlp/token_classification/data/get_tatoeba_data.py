@@ -200,8 +200,9 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
                             
                         if (add_break):
                             if len(text.strip()) > 0:
-                                text_f.write(text.strip() + '\n')
-                                labels_f.write(labels.strip() + '\n')
+                                if len(text.strip()) < 126:    
+                                    text_f.write(text.strip() + '\n')
+                                    labels_f.write(labels.strip() + '\n')
                                 text = ''
                                 labels = ''
                                 tokens = 0
