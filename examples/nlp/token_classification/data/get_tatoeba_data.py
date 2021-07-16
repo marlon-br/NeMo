@@ -156,7 +156,7 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
     labels_file = os.path.join(output_dir, 'labels_' + base_name)
     text_file = os.path.join(output_dir, 'text_' + base_name)
     
-    special_characters = ""()『』\"""
+    special_characters = "（）()『』\""
 
     with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
         with open(text_file, 'w', encoding='utf-8') as text_f:
