@@ -155,6 +155,8 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
     base_name = os.path.basename(file_path)
     labels_file = os.path.join(output_dir, 'labels_' + base_name)
     text_file = os.path.join(output_dir, 'text_' + base_name)
+    
+    special_characters = ""()『』\"""
 
     with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
         with open(text_file, 'w', encoding='utf-8') as text_f:
@@ -162,31 +164,31 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
                 for line in f:
                     if len(line) == 0:
                         continue
-                        
+
                     line = line.replace('\t', ' ')
                     line = line.replace(' 。', '。')
                     line = line.replace(' 、', '、')
                     line = line.replace(' ?', '?')
                     line = line.replace(' !', '!')
                     line = line.split()
-                      
+
                     text = ''
                     labels = ''
-                    tokens = 0 
+                    tokens = 0
                     for word in line:
-                        tokens += 1
+                        tokens += len(word)
                         add_break = False
-                        
+
                         label = word[-1] if word[-1] in punct_marks else 'O'
-                        
+
                         if (label == "。"):
-                            if tokens > 100:
+                            if tokens > 80:
                                 add_break = True
                             label = "."
-                        
+
                         if (label == "、"):
                             label = ","
-                        
+
                         word = remove_punctuation(word)
                         if len(word) > 0:
                             if word[0].isupper():
@@ -197,19 +199,25 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
                             word = word.lower()
                             text += word + ' '
                             labels += label + ' '
-                            
+
                         if (add_break):
                             if len(text.strip()) > 0:
-                                if tokens < 126:    
-                                    text_f.write(text.strip() + '\n')
-                                    labels_f.write(labels.strip() + '\n')
+                                if tokens < 100:
+                                    if (any(c in special_characters for c in text)):
+                                        pass
+                                    else:
+                                        text_f.write(text.strip() + '\n')
+                                        labels_f.write(labels.strip() + '\n')
                                 text = ''
                                 labels = ''
                                 tokens = 0
 
                     if len(text.strip()) > 0:
-                        text_f.write(text.strip() + '\n')
-                        labels_f.write(labels.strip() + '\n')
+                        if (any(c in special_characters for c in text)):
+                            pass
+                        else:
+                            text_f.write(text.strip() + '\n')
+                            labels_f.write(labels.strip() + '\n')
 
     print(f'{text_file} and {labels_file} created from {file_path}.')
 
