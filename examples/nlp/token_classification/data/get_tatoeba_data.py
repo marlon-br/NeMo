@@ -202,12 +202,14 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
 
                         if (add_break):
                             if len(text.strip()) > 0:
-                                if tokens < 100:
-                                    if (any(c in special_characters for c in text)):
-                                        pass
-                                    else:
+                                if (any(c in special_characters for c in text)):
+                                    pass
+                                else:
+                                    if tokens < 120:
                                         text_f.write(text.strip() + '\n')
                                         labels_f.write(labels.strip() + '\n')
+                                    else:
+                                        print("sdsd " + str(tokens))
                                 text = ''
                                 labels = ''
                                 tokens = 0
@@ -216,8 +218,11 @@ def create_text_and_labels(output_dir: str, file_path: str, punct_marks: str = '
                         if (any(c in special_characters for c in text)):
                             pass
                         else:
-                            text_f.write(text.strip() + '\n')
-                            labels_f.write(labels.strip() + '\n')
+                            if tokens < 120:
+                                text_f.write(text.strip() + '\n')
+                                labels_f.write(labels.strip() + '\n')
+                            else:
+                                print(tokens)
 
     print(f'{text_file} and {labels_file} created from {file_path}.')
 
